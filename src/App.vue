@@ -1,28 +1,44 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="main">
+    <menus />
+    <inputs />
+    <drawer />
+    <picshow />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import menus from "./components/menu.vue";
+import drawer from "./components/drawer.vue";
+import inputs from "./components/input.vue";
+import picshow from "./components/picshow.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    menus,
+    drawer,
+    inputs,
+    picshow,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  box-sizing: border-box;
+}
+.main {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-image: url("../src/assets/stardust.png");
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 </style>
