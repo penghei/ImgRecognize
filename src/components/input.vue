@@ -10,12 +10,13 @@
         placeholder="请输入"
         id="inputin"
         v-model="input"
+        ref="elInput"
       ></el-input>
       <el-button
         class="elbutton"
         icon="el-icon-search"
         circle
-        @click="picshow(), inputchange(), inputcsschange()"
+        @click="inputchange()"
       >
       </el-button>
     </div>
@@ -23,13 +24,20 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "inputs",
   data() {
     return {
       top: 250,
-      show:false,
-      input:''
+      show: false,
+      input: "",
+      InputInf: "",
+      captions: [],
+      ifFile: false,
+      ifFindFile: false,
+      ifButton: false
     };
   },
   methods: {
@@ -42,10 +50,24 @@ export default {
       this.SendMessTopicshow();
     },
     inputchange() {
-      var inf = document.getElementById("inputin").value;
+      var inf = this.$refs.elInput.value;
+      if (inf == "") {
+        this.$message({
+          type: "error",
+          message: "请先输入，不能为空",
+        });
+        this.show = false;
+        return;
+      } else if (!this.ifFile) {
+        this.$message({
+          type: "warning",
+          message: "还没有上传图片，请先上传",
+        });
+        return;
+      }
+
       inf = inf.replace(/\s+/g, " ");
       inf = inf.toLowerCase();
-      console.log(inf);
       this.input = "";
       inf = inf.replaceAll(",", " ,");
       inf = inf.replaceAll(".", " .");
@@ -55,13 +77,50 @@ export default {
       inf = inf.replaceAll("?", " ?");
       inf = inf.replaceAll("&", " &");
       this.InputInf = inf;
+      this.ifButton = true;
+      this.picshow();
+      this.inputcsschange();
+      this.Gettextcaption();
     },
     inputcsschange() {
       this.top = 50;
     },
-    SendMessTopicshow(){
-           this.bus.$emit('inputmess',this.show)
-       }
+    Gettextcaption() {
+      var url =
+        "http://localhost:8000/get_text_caption?query=" +
+        this.InputInf.toString();
+      axios
+        .get(url)
+        .then((response) => response.data.data)
+        .then((data) => {
+          this.captions = [];
+          for (var i = 0; i < data.length; i++) {
+            this.captions.push(data[i]);
+          }
+          this.SendMessTodrawer();
+        })
+        .catch((error) => {
+          this.$message.error("上传错误 重试一下试试？");
+          console.log(error);
+        });
+    },
+
+    SendMessTopicshow() {
+      this.bus.$emit("inputmess", [this.show, this.ifButton]);
+    },
+    SendMessTodrawer() {
+      this.bus.$emit("sentenceCaption", this.captions);
+    },
+  },
+  mounted() {
+    this.bus.$on("ifFile", (data) => {
+      //来自drawer
+      this.ifFile = data;
+    });
+    this.bus.$on("ifFindFile", (data) => {
+      //来自picshow
+      this.ifFindFile = data;
+    });
   },
 };
 </script>

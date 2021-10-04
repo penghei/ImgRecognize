@@ -3,12 +3,12 @@
     <div class="pic" v-if="show">
       <div align="center">
         <el-image
-          v-for="url in urls"
+          v-for="(imgSrc, index) in imgs"
           class="imgpreview"
-          :key="url"
-          :src="url"
-          style="width: 200px; height: 200px"
-          :preview-src-list="srcList"
+          :key="index"
+          :src="imgSrc"
+          :style="{ width: picwidth + 'px', height: picwidth + 'px' }"
+          :preview-src-list="imgs"
         ></el-image>
       </div>
     </div>
@@ -16,49 +16,85 @@
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+
 export default {
   name: "picshow",
   data() {
     return {
       show: false,
-      urls: [
-        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-        "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
-        "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
-        "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg",
-        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-        "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
-        "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
-        "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg",
-      ],
-      srcList: [
-        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-        "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
-        "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
-        "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg",
-        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-        "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
-        "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
-        "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
-        "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg",
-      ],
+      imgs: [],
+      urls: [],
+      srcList: [],
+      picwidth: 200,
     };
   },
-  methods: {},
+  methods: {
+    getImgEncoded() {
+      ipcRenderer.removeAllListeners("getImg");
+      ipcRenderer.send(
+        "imgEncoding",
+        this.urls.map((e) => ({
+          name: "dummy",
+          url: e,
+        }))
+      );
+      ipcRenderer.on("getImg", (event, result) => {
+        this.imgs = result.map((e) => e.url);
+      });
+    },
+    getPicNum() {
+      let picnum = this.urls.length;
+      switch (picnum) {
+        case 0:
+          break;
+        case 1:
+          this.picwidth = 800;
+          break;
+        case 2:
+          this.picwidth = 400;
+          break;
+        case 3:
+          this.picwidth = 300;
+          break;
+        default:
+          this.picwidth = 200;
+          break;
+      }
+    },
+    geturls() {
+      if (
+        this.urls.length == 0 &&
+        this.srcList.length == 0 &&
+        this.imgs.length == 0
+      ) {
+        if (
+          document.getElementsByClassName("el-message--warning").length === 0
+        ) {
+          this.$message({
+            type: "warning",
+            message: "没有搜到哦",
+          });
+        }
+      }
+    },
+  },
   mounted() {
     this.bus.$on("inputmess", (data) => {
-      this.show = data;
+      this.show = data[0];
+    });
+    this.bus.$on("resultPicUrls", (resulturls) => {
+      this.imgs = [];
+      this.urls = [];
+      this.srcList = [];
+      //插入渲染数组
+      for (let i = 0; i < resulturls.length; i++) {
+        this.urls.push(resulturls[i]);
+        this.srcList.push(resulturls[i]);
+      }
+      this.getImgEncoded();
+      this.geturls();
+      this.getPicNum();
     });
   },
 };

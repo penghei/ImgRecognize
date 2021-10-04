@@ -2614,6 +2614,32 @@
     "safe-buffer" "5.1.2"
     "vary" "~1.1.2"
 
+"compute-cosine-similarity@^1.0.0":
+  "integrity" "sha1-KfK/Lnuu+iMcq6QFkaMcF7GaTpU="
+  "resolved" "https://registry.nlark.com/compute-cosine-similarity/download/compute-cosine-similarity-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "compute-dot" "^1.1.0"
+    "compute-l2norm" "^1.1.0"
+    "validate.io-array" "^1.0.5"
+    "validate.io-function" "^1.0.2"
+
+"compute-dot@^1.1.0":
+  "integrity" "sha1-AaW6LHr3O5kAKsslhFnJV2qCMtw="
+  "resolved" "https://registry.nlark.com/compute-dot/download/compute-dot-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "validate.io-array" "^1.0.3"
+    "validate.io-function" "^1.0.2"
+
+"compute-l2norm@^1.1.0":
+  "integrity" "sha1-vQkTHGs2yNcMaDNOF2AJpOCpiaw="
+  "resolved" "https://registry.nlark.com/compute-l2norm/download/compute-l2norm-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "validate.io-array" "^1.0.3"
+    "validate.io-function" "^1.0.2"
+
 "concat-map@0.0.1":
   "integrity" "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
   "resolved" "https://registry.npm.taobao.org/concat-map/download/concat-map-0.0.1.tgz"
@@ -7374,6 +7400,11 @@
   dependencies:
     "is-arrayish" "^0.3.1"
 
+"simple-web-worker@1.2.0":
+  "integrity" "sha1-Le/9CZiXa4JLFBonzlBNMdDZkQg="
+  "resolved" "https://registry.npm.taobao.org/simple-web-worker/download/simple-web-worker-1.2.0.tgz"
+  "version" "1.2.0"
+
 "slash@^1.0.0":
   "integrity" "sha1-xB8vbDn8FtHNF61LXYlhFK5HDVU="
   "resolved" "https://registry.npm.taobao.org/slash/download/slash-1.0.0.tgz"
@@ -8266,6 +8297,16 @@
     "spdx-correct" "^3.0.0"
     "spdx-expression-parse" "^3.0.0"
 
+"validate.io-array@^1.0.3", "validate.io-array@^1.0.5":
+  "integrity" "sha1-W1osr9j4uFq7L4hroVPy2Tond00="
+  "resolved" "https://registry.npm.taobao.org/validate.io-array/download/validate.io-array-1.0.6.tgz"
+  "version" "1.0.6"
+
+"validate.io-function@^1.0.2":
+  "integrity" "sha1-NDoZgC7TsZaCaceA5VjpNBHAutc="
+  "resolved" "https://registry.npm.taobao.org/validate.io-function/download/validate.io-function-1.0.2.tgz"
+  "version" "1.0.2"
+
 "vary@~1.1.2":
   "integrity" "sha1-IpnwLG3tMNSllhsLn3RSShj2NPw="
   "resolved" "https://registry.nlark.com/vary/download/vary-1.1.2.tgz"
@@ -8348,6 +8389,13 @@
   "integrity" "sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU="
   "resolved" "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
+
+"vue-worker@^1.2.1":
+  "integrity" "sha1-3q4UuYqdidqrsg5/xhkGQoSbbZM="
+  "resolved" "https://registry.nlark.com/vue-worker/download/vue-worker-1.2.1.tgz"
+  "version" "1.2.1"
+  dependencies:
+    "simple-web-worker" "1.2.0"
 
 "vue@^2 || ^3.0.0-0", "vue@^2.5.17", "vue@^2.6.11":
   "integrity" "sha1-5RqlJQJQ1Wmj+606ilpofWA24jU="

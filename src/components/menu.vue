@@ -9,9 +9,6 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-menu-item index="1" style="font-size: larger"
-        >首页
-      </el-menu-item>
       <el-menu-item index="2" @click="Beginuse" style="font-size: larger"
         >开始使用
       </el-menu-item>
